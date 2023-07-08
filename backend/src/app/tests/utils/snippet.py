@@ -1,14 +1,6 @@
 from typing import Optional
-
-from httpx import AsyncClient
-from sqlalchemy import select
-#from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app import crud, models, schemas
-from app.core.config import settings
-from app.models import Tag
-from app.models.language import Language
 from app.schemas.link import LinkCreate
 from app.schemas.snippet import SnippetCreate
 from app.tests.utils.user import create_random_user
@@ -28,20 +20,6 @@ async def create_random_snippet(db: AsyncSession, *, user_id: Optional[int] = No
 
 
 async def initialize_data(db: AsyncSession, user_id: Optional[int] = None):
-    # tags_to_be_deleted = await db.execute(
-    #     select(Tag)
-    # )
-    # tags_to_delete = tags_to_be_deleted.scalars().all()
-    # for tag in tags_to_delete:
-    #     await db.delete(tag)
-    #
-    # languages_to_be_deleted = await db.execute(
-    #     select(Language)
-    # )
-    # languages_to_delete = languages_to_be_deleted.scalars().all()
-    # for tag in languages_to_delete:
-    #     await db.delete(tag)
-
     languages = [
         {"id": 1, "name": "Java"},
         {"id": 2, "name": "Python"},
