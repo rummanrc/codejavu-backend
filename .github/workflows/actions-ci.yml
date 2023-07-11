@@ -18,27 +18,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: 'Create env file'
-        run: |
-          touch .env
-          echo "DOMAIN=localhost" >> .env
-          echo "STACK_NAME=codejavu-com" >> .env
-          echo "TRAEFIK_PUBLIC_NETWORK=traefik-public" >> .env
-          echo "TRAEFIK_TAG=codejavu.com" >> .env
-          echo "TRAEFIK_PUBLIC_TAG=traefik-public" >> .env
-          echo "DOCKER_IMAGE_BACKEND=codejavu-backend" >> .env
-          echo "PROJECT_NAME=codejavu" >> .env
-          echo "SECRET_KEY=9b6175ede02c1376fc16549b925873d722caeba78a04d6d7a4fa031" >> .env
-          echo "FIRST_SUPERUSER=admin@codejavu.com" >> .env
-          echo "FIRST_SUPERUSER_PASSWORD=password" >> .env
-          echo "SMTP_TLS=True" >> .env
-          echo "SMTP_PORT=587" >> .env
-          echo "EMAILS_FROM_EMAIL=info@codejavu.com" >> .env
-          echo "USERS_OPEN_REGISTRATION=False" >> .env
-          echo "POSTGRES_SERVER=db" >> .env
-          echo "POSTGRES_USER=postgres" >> .env
-          echo "POSTGRES_PASSWORD=password" >> .env
-          echo "POSTGRES_DB=app" >> .env
-          cat .env
+        run: cp fake.env .env
 
       - name: Run Test Script
         run: sh ./scripts/test.sh
