@@ -8,7 +8,7 @@ SMTP_HOST="" \
 TRAEFIK_PUBLIC_NETWORK_IS_EXTERNAL=false \
 INSTALL_DEV=true \
 docker-compose \
--f docker-compose-unit-test.yml \
+-f docker-compose.yml \
 config > docker-stack.yml
 
 docker-compose -f docker-stack.yml build
