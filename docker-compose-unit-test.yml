@@ -56,7 +56,6 @@ services:
 
 volumes:
   app-db-data:
-  pgadmin-data:
 
 networks:
   traefik-public:
