@@ -1,0 +1,14 @@
+version: '3'
+services:
+  web:
+    container_name: codejavu-prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - .:/usr/share/nginx/html
+    stdin_open: true
+    tty: true
+    restart: always
