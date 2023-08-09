@@ -4,10 +4,19 @@
 name: Python application
 
 on:
-  push:
-    branches: [ "dev1.0" ]
-  pull_request:
-    branches: [ "dev1.0" ]
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Person to greet'
+        # Default value if no value is explicitly provided
+        default: 'World'
+        # Input has to be provided for the workflow to run
+        required: false
+        # The data type of the input
+        type: string
+
 
 permissions:
   contents: read
@@ -54,32 +63,4 @@ jobs:
     - name: Test test script
       run: |
         bash tests-start.sh  "$@" 
-        
-# name: CI
-
-# on:
-#   push:
-#     branches:
-#       - dev1.0
-#   pull_request:
-#     branches:
-#       - dev1.0
-
-# jobs:
-#   build:
-#     name: Build and Test
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
-
-#       - name: 'Create env file'
-#         run: |
-#           touch .env
-#           echo "${{ secrets.ENV }}" >> .env
-#           cat .env
-
-#       - name: Run Test Script
-#         run: sh ./scripts/test.sh
 
