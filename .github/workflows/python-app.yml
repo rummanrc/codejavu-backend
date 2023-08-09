@@ -60,6 +60,10 @@ jobs:
       run: echo "POSTGRES_DB=app" >> "$GITHUB_ENV"
     - name: Set POSTGRES_SERVER to env
       run: echo "POSTGRES_SERVER=db" >> "$GITHUB_ENV"
+    - name: Current directory
+      run: pwd
+    - name: See files and folders
+      run: ls
     - name: Test test script
       run: |
         bash tests-start.sh  "$@" 
