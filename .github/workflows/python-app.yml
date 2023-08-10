@@ -68,6 +68,5 @@ jobs:
       run: ls
     - name: Test test script
       run: |
-        cd /home/runner/work/codejavu-backend/codejavu-backend/backend/src &&
-        python app/tests_pre_start.py &&
-        bash scripts/test.sh "$@"
+        bash backend/src/tests-start.sh "$@"
+
