@@ -69,5 +69,5 @@ jobs:
     - name: Test test script
       run: |
         cd backend &&
-        bash backend/src/tests-start.sh "$@"
+        bash src/tests-start.sh "$@"
 
