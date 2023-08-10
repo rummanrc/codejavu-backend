@@ -5,19 +5,6 @@ name: Python application
 
 on:
   workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
-        required: false
-        # The data type of the input
-        type: string
-
-
 # permissions:
 #   contents: read
 
@@ -27,10 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PYTHONPATH: ${{ github.workspace }}/backend/src
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: app
+      POSTGRES_HOST: localhost
       POSTGRES_SERVER: localhost
+      POSTGRES_PORT: 5432
     services:
           db:
             image: postgres
@@ -38,14 +24,12 @@ jobs:
               POSTGRES_USER: postgres
               POSTGRES_PASSWORD: password
               POSTGRES_DB: app
-              POSTGRES_SERVER: localhost
             options: >-
               --health-cmd pg_isready
               --health-interval 10s
               --health-timeout 5s
               --health-retries 5
             ports:
-              # Maps tcp port 5432 on service container to the host
               - 5432:5432
     steps:
     - uses: actions/checkout@v3
@@ -72,7 +56,7 @@ jobs:
     - name: Set POSTGRES_DB to env
       run: echo "POSTGRES_DB=app" >> "$GITHUB_ENV"
     - name: Set POSTGRES_SERVER to env
-      run: echo "POSTGRES_SERVER=db" >> "$GITHUB_ENV"
+      run: echo "POSTGRES_SERVER=localhost" >> "$GITHUB_ENV"
     - name: Current directory
       run: pwd
     - name: See files and folders
