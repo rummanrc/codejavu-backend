@@ -68,5 +68,6 @@ jobs:
       run: ls
     - name: Test test script
       run: |
+        cd backend && |
         bash backend/src/tests-start.sh "$@"
 
