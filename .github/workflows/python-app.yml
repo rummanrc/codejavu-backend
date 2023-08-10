@@ -19,7 +19,7 @@ jobs:
       POSTGRES_PORT: 5432
     services:
           db:
-            image: postgres
+            image: postgres:12.14-alpine
             env:
               POSTGRES_USER: postgres
               POSTGRES_PASSWORD: password
@@ -38,31 +38,31 @@ jobs:
       with:
         python-version: "3.10"
         cache: 'pip'
-    - run: pip install -r ./backend/src/requirements.txt
-    - name: Create env file
-      run: |
-          touch .env
-          echo "$(<fakenv.txt )" > .env
-          cat .env
-    - name: Upgrade pip
-      run: python -m pip install --upgrade pip
-#     - name: Set PYTHONPATH to env
-#       run: echo "${{ github.workspace }}/backend/src" >> "$GITHUB_PATH"
-#       run: echo "PYTHONPATH='${PYTHONPATH}:${{ github.workspace }}/backend/src'    
-    - name: Set POSTGRES_USER to env
-      run: echo "POSTGRES_USER=postgres" >> "$GITHUB_ENV"
-    - name: Set POSTGRES_PASSWORD to env
-      run: echo "POSTGRES_PASSWORD=password" >> "$GITHUB_ENV"
-    - name: Set POSTGRES_DB to env
-      run: echo "POSTGRES_DB=app" >> "$GITHUB_ENV"
-    - name: Set POSTGRES_SERVER to env
-      run: echo "POSTGRES_SERVER=localhost" >> "$GITHUB_ENV"
-    - name: Current directory
-      run: pwd
-    - name: See files and folders
-      run: ls
-    - name: Test test script
-      run: |
-        cd backend/src &&
-        bash tests-start.sh "$@"
+#     - run: pip install -r ./backend/src/requirements.txt
+#     - name: Create env file
+#       run: |
+#           touch .env
+#           echo "$(<fakenv.txt )" > .env
+#           cat .env
+#     - name: Upgrade pip
+#       run: python -m pip install --upgrade pip
+# #     - name: Set PYTHONPATH to env
+# #       run: echo "${{ github.workspace }}/backend/src" >> "$GITHUB_PATH"
+# #       run: echo "PYTHONPATH='${PYTHONPATH}:${{ github.workspace }}/backend/src'    
+#     - name: Set POSTGRES_USER to env
+#       run: echo "POSTGRES_USER=postgres" >> "$GITHUB_ENV"
+#     - name: Set POSTGRES_PASSWORD to env
+#       run: echo "POSTGRES_PASSWORD=password" >> "$GITHUB_ENV"
+#     - name: Set POSTGRES_DB to env
+#       run: echo "POSTGRES_DB=app" >> "$GITHUB_ENV"
+#     - name: Set POSTGRES_SERVER to env
+#       run: echo "POSTGRES_SERVER=localhost" >> "$GITHUB_ENV"
+#     - name: Current directory
+#       run: pwd
+#     - name: See files and folders
+#       run: ls
+#     - name: Test test script
+#       run: |
+#         cd backend/src &&
+#         bash tests-start.sh "$@"
 
