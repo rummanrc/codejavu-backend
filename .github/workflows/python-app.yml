@@ -27,6 +27,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PYTHONPATH: ${{ github.workspace }}/backend/src
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: app
+      POSTGRES_SERVER: db
     services:
           db:
             image: postgres
@@ -57,8 +61,8 @@ jobs:
     - name: Install Dependencies
       run: pip install -r ./backend/src/requirements.txt  
 #     - name: Set PYTHONPATH to env
-#       run: echo "/home/runner/work/codejavu-backend/codejavu-backend/backend/src" >> "$GITHUB_PATH"
-#       run: echo "PYTHONPATH='${PYTHONPATH}:/Users/onu/dev/PycharmProjects/codejavu-backend/backend/src'    
+#       run: echo "${{ github.workspace }}/backend/src" >> "$GITHUB_PATH"
+#       run: echo "PYTHONPATH='${PYTHONPATH}:${{ github.workspace }}/backend/src'    
     - name: Set POSTGRES_USER to env
       run: echo "POSTGRES_USER=postgres" >> "$GITHUB_ENV"
     - name: Set POSTGRES_PASSWORD to env
