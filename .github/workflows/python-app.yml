@@ -65,4 +65,5 @@ jobs:
       run: ls
     - name: Test test script
       run: |
-        bash ./backend/src/tests-start.sh  "$@"
+        cd /home/runner/work/codejavu-backend/codejavu-backend/backend/src &&
+        bash tests-start.sh  "$@"
