@@ -34,7 +34,7 @@ SENTRY_DSN=
 FLOWER_BASIC_AUTH=admin:password
 
 # Postgres
-POSTGRES_SERVER=localhost
+POSTGRES_SERVER=postgres
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=password
 POSTGRES_DB=app
