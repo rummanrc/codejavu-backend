@@ -13,7 +13,7 @@ jobs:
     env:
       PYTHONPATH: ${{ github.workspace }}/backend/src
     services:
-          postgres:
+          db:
             image: postgres
             env:
               POSTGRES_USER: postgres
@@ -63,14 +63,6 @@ jobs:
             /opt/poetry/bin/poetry install --no-root
     - name: Set PYTHONPATH to env
       run: echo "PYTHONPATH=${{ github.workspace }}/backend/src" >> "$GITHUB_ENV"
-    - name: Set POSTGRES_USER to env
-      run: echo "POSTGRES_USER=postgres" >> "$GITHUB_ENV"
-    - name: Set POSTGRES_PASSWORD to env
-      run: echo "POSTGRES_PASSWORD=password" >> "$GITHUB_ENV"
-    - name: Set POSTGRES_DB to env
-      run: echo "POSTGRES_DB=app" >> "$GITHUB_ENV"
-    - name: Set POSTGRES_SERVER to env
-      run: echo "POSTGRES_SERVER=localhost" >> "$GITHUB_ENV"
     - name: current work dir
       run: pwd
     - name: run test
