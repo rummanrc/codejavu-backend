@@ -81,6 +81,3 @@ jobs:
             echo "PYTHONPATH=${{ github.workspace }}/backend/src" >> "$GITHUB_ENV" &&
             python app/tests_pre_start.py &&
             bash scripts/test.sh "$@"
-    - name: Test test script
-      run: |
-        bash tests-start.sh  "$@" 
