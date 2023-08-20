@@ -1,1 +1,86 @@
+name: Python application
 
+on:
+  workflow_dispatch:
+
+# permissions:
+#   contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ${{ github.workspace }}/backend/src
+    services:
+          postgres:
+            image: postgres
+            env:
+              POSTGRES_USER: postgres
+              POSTGRES_PASSWORD: password
+              POSTGRES_DB: app
+              POSTGRES_PORT: 5432
+            ports:
+            - 5432:5432
+            options: >-
+              --health-cmd pg_isready
+              --health-interval 10s
+              --health-timeout 5s
+              --health-retries 5
+          queue:
+            image: rabbitmq:latest
+            ports:
+            - 5672:5672
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - name: Create env file
+      run: |
+          touch .env
+          echo "$(<fakenv.txt )" >> .env
+          cat .env
+    # - name: Install dependencies
+    #   run: |
+    #        apt-get -y install curl &&
+    #        apt-get -y install pip
+    - name: install uvicorn
+      run: |
+            pip install --no-cache-dir uvicorn[standard]==0.18.3
+    - name: install gunicorn
+      run: pip install --no-cache-dir gunicorn==20.1.0
+    - name: install poetry
+      run: curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python3
+    - name: set env poetry path
+      run: echo "PATH=/opt/poetry/bin:$PATH" >> "$GITHUB_ENV"
+    - name: venv disable
+      run: /opt/poetry/bin/poetry config virtualenvs.create false
+    - name: install dependencies
+      run: |
+            cd ${{ github.workspace }}/backend/src &&
+            /opt/poetry/bin/poetry install --no-root
+    - name: Set PYTHONPATH to env
+      run: echo "PYTHONPATH=${{ github.workspace }}/backend/src" >> "$GITHUB_ENV"
+    - name: Set POSTGRES_USER to env
+      run: echo "POSTGRES_USER=postgres" >> "$GITHUB_ENV"
+    - name: Set POSTGRES_PASSWORD to env
+      run: echo "POSTGRES_PASSWORD=password" >> "$GITHUB_ENV"
+    - name: Set POSTGRES_DB to env
+      run: echo "POSTGRES_DB=app" >> "$GITHUB_ENV"
+    - name: Set POSTGRES_SERVER to env
+      run: echo "POSTGRES_SERVER=localhost" >> "$GITHUB_ENV"
+    - name: current work dir
+      run: pwd
+    - name: run test
+      run: |
+            echo $PYTHONPATH &&
+            echo `pwd` &&
+            cd ${{ github.workspace }}/backend/src &&
+            echo "PYTHONPATH=${{ github.workspace }}/backend/src" >> "$GITHUB_ENV" &&
+            python app/tests_pre_start.py &&
+            bash scripts/test.sh "$@"
+    - name: Test test script
+      run: |
+        bash tests-start.sh  "$@" 
