@@ -1,7 +1,7 @@
 name: Unit Testing
 
 on:
-  workflow_dispatch:
+  push:
 
 # permissions:
 #   contents: read
@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       PYTHONPATH: ${{ github.workspace }}/backend/src
     services:
