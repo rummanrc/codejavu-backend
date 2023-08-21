@@ -34,6 +34,7 @@ async def init() -> None:
         await init_db(db=db)
         await db.execute("SELECT 1")
         logger.info("DATABASE DONE")
+        await db.close()
     except Exception as e:
         logger.error(e)
         raise e

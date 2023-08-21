@@ -24,7 +24,11 @@ class SnippetCreate(SnippetBase):
 
 # Properties to receive on snippet update
 class SnippetUpdate(SnippetCreate):
-    pass
+    title: Optional[str]
+    snippet: Optional[str]
+    language_id: Optional[int]
+    links: Optional[List[LinkBase]] = []
+    tag_ids: Optional[List[int]] = []
 
 
 # Properties shared by models stored in DB
