@@ -113,6 +113,10 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = True
-
+    RABBITMQ_NODE_PORT: int
+    RABBITMQ_DEFAULT_USER: str
+    RABBITMQ_DEFAULT_PASS: str
+    RABBITMQ_DEFAULT_VHOST: str
+    HOSTNAME: str
 
 settings = Settings()
