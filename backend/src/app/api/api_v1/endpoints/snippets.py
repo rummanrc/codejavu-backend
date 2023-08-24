@@ -96,7 +96,7 @@ async def search_snippet(
         *,
         db: AsyncSession = Depends(deps.async_get_db),
         query: str,
-        limit: int,
+        limit: int = Body(..., embed=True),
         current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
