@@ -5,9 +5,9 @@ from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.expression import select
-
+from sqlalchemy import text
 from app import crud
-from app.crud.base import CRUDBase
+from app.crud.base import CRUDBase, ModelType
 from app.models import Link, Tag
 from app.models.snippet import Snippet
 from app.schemas.link import LinkBase
@@ -41,15 +41,25 @@ class CRUDSnippet(CRUDBase[Snippet, SnippetCreate, SnippetUpdate]):
         return db_obj
 
     async def get_multi_by_owner(
-            self, db: AsyncSession, *, user_id: int, skip: int = 0, limit: int = 100
+            self, db: AsyncSession, *, user_id: int, skip: int = 0, limit: int = 100, ids: List[int] | None = None
     ) -> List[Snippet]:
-        result = await db.execute(
-            select(self.model)
-            .filter(Snippet.user_id == user_id)
-            .offset(skip)
-            .limit(limit)
-            .all()
-        )
+        if ids is not None:
+            result = await db.execute(
+                select(self.model)
+                .filter(Snippet.user_id == user_id)
+                .filter(Snippet.id.in_(ids))
+                .offset(skip)
+                .limit(limit)
+                .all()
+            )
+        else:
+            result = await db.execute(
+                select(self.model)
+                .filter(Snippet.user_id == user_id)
+                .offset(skip)
+                .limit(limit)
+                .all()
+            )
         return list(result.scalars().all())
 
     async def update(
@@ -107,6 +117,12 @@ class CRUDSnippet(CRUDBase[Snippet, SnippetCreate, SnippetUpdate]):
             link = Link(snippet_id=snippet_id, url=link_data["url"])  # type: ignore
             db.add(link)
         return db
+
+    async def fuzzy_search(self, db: AsyncSession, *,  user_id: int, query: str, limit: int) -> List[Any]:
+        query = f"SELECT id, title  FROM snippet WHERE user_id={user_id} and similarity(title, '{query}') > 0.2 LIMIT {limit};"
+        sql = text(query)
+        result = await db.execute(sql)
+        return result.all()
 
 
 snippet = CRUDSnippet(Snippet)

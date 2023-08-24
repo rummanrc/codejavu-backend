@@ -1,6 +1,6 @@
 from typing import Any, List
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Body
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud, models, schemas
@@ -89,3 +89,39 @@ async def delete_snippet(
     snippet = await read_snippet(db=db, id=id, current_user=current_user)
     snippet = crud.snippet.remove(db=db, id=id)
     return snippet
+
+
+@router.get("/search/{query}", response_model=List[Any])
+async def search_snippet(
+        *,
+        db: AsyncSession = Depends(deps.async_get_db),
+        query: str,
+        limit: int,
+        current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Search snippets.
+    """
+    snippet_title_data = await crud.snippet.fuzzy_search(db=db, user_id=current_user.id, query=query, limit=limit)
+    return snippet_title_data
+
+
+@router.post("/search", response_model=List[schemas.SnippetWithRelatedData])
+async def get_search_snippets(
+        *,
+        db: AsyncSession = Depends(deps.async_get_db),
+        ids: List[int] = Body(..., embed=True),
+        skip: int = 0,
+        limit: int = 100,
+        current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Retrieve snippets by ids.
+    """
+    if crud.user.is_superuser(current_user):
+        snippets = await crud.snippet.get_multi(db, skip=skip, limit=limit, ids=ids)
+    else:
+        snippets = await crud.snippet.get_multi_by_owner(
+            db=db, user_id=current_user.id, skip=skip, limit=limit, ids=ids
+        )
+    return snippets
